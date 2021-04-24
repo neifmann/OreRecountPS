@@ -3,25 +3,28 @@
 Set-ExecutionPolicy -Scope CurrentUser Bypass -Force
 
 # Set input log file full path
-$InputFile = "E:\pstemp\Loot - 2021.04.23 20.47.25.txt"
+$InputFile = "E:\pstemp\Loot_-_2021.04.21_16.22.12.txt"
 
 # Set output file 
-$OutputFile = "E:\pstemp\out.txt"
+$OutputFile = "E:\pstemp\Loot_-_2021.04.21_16.22.12 - out.txt"
 
 # Set FleetCom pilot
-$fleetCom = @('Natalie Moreau')
+$fleetCom = @(
+            'Roman Hort'
+            )
 
 # Set trucks pilots Names
-$trucks = @('Arife Frostbreeze')
+$trucks = @(
+            'Ponkenen Kashada'
+            )
 
 # Set pilots who did not storing ore in Orca
-$noOrka = @('Gentle Locksmith','BoB Pu4inski','Boaten4 Boatz','Dazutlek UnDead')
+$noOrka = @()
 
 
 
 #initialize variables
 $excludedPersons = $trucks + $noOrka
-$sumIceVolume = 0
 $sumOreVolume = 0
 $data = @()
 
@@ -79,10 +82,6 @@ foreach ($name in $data) {
 
     $oreVolume = 0
 
-    $WhiteGlaze = 0
-
-    $iceVolume = 0
-
     foreach($line in $text){
         $nline = $line.Split("	")
 
@@ -118,13 +117,6 @@ foreach ($name in $data) {
 
         }
     }
-
-    #Ice
-
-    $iceVolume = $WhiteGlaze*100
-    $sumIceVolume += $iceVolume
-
-    $WhiteGlazeSum += $WhiteGlaze
 
     #volimes
     $VolumeOfVeldspar = $Veldspar*0.10
@@ -166,10 +158,7 @@ foreach ($name in $data) {
     Azure Plagioclase: $AzurePlagioclase
     Rich Plagioclase: $RichPlagioclase
 
-    White Glaze: $WhiteGlaze
-
     Ore Volume: $oreVolume
-    Ice Volume: $iceVolume
     "
 }
 
@@ -189,10 +178,6 @@ $noOrka
 Write-Host "
 Sum Ore Value:"
 $sumOreVolume
-
-Write-Host "
-Sum Ice Value:"
-$sumIceVolume
 
 Write-Host " "
 Stop-Transcript
