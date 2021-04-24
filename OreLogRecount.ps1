@@ -3,11 +3,26 @@
 Set-ExecutionPolicy -Scope CurrentUser Bypass -Force
 
 # Set input log file full path
-$InputFile = "E:\pstemp\Loot - 2021.04.20 20.30.32.txt"
+$InputFile = "E:\pstemp\Loot - 2021.04.23 20.47.25.txt"
 
 # Set output file 
-$OutputFile = "E:\pstemp\Loot - 2021.04.20 20.30.32 - recounted.txt"
+$OutputFile = "E:\pstemp\out.txt"
 
+# Set FleetCom pilot
+$fleetCom = @('Natalie Moreau')
+
+# Set trucks pilots Names
+$trucks = @('Arife Frostbreeze')
+
+# Set pilots who did not storing ore in Orca
+$noOrka = @('Gentle Locksmith','BoB Pu4inski','Boaten4 Boatz','Dazutlek UnDead')
+
+
+
+#initialize variables
+$excludedPersons = $trucks + $noOrka
+$sumIceVolume = 0
+$sumOreVolume = 0
 $data = @()
 
 Write-Host "-----------------------------"
@@ -17,7 +32,7 @@ Write-Host "-----------------------------"
 
 $text = Get-Content -path $InputFile
 
-#list of pilots
+#get list of pilots
 foreach($line in $text){
     $nline = $line.Split("	")
 
@@ -33,7 +48,7 @@ foreach($line in $text){
 
     Write-Host "-----------------------------"
 
-    if ( !($properties.name -in $data) ) {
+    if ( !($properties.name -in $data) -and !( $properties.name -in $excludedPersons ) ) {
 
         $data += $properties.name
 
@@ -41,9 +56,9 @@ foreach($line in $text){
 
 }
 
-Start-Transcript -path $OutputFile -append 
+Start-Transcript -path $OutputFile -Force
 
-#iterate over the list of pilots
+#iterate over pilots in spades list
 foreach ($name in $data) {
 
     $Veldspar = 0
@@ -61,6 +76,12 @@ foreach ($name in $data) {
     $Plagioclase = 0
     $AzurePlagioclase = 0
     $RichPlagioclase = 0
+
+    $oreVolume = 0
+
+    $WhiteGlaze = 0
+
+    $iceVolume = 0
 
     foreach($line in $text){
         $nline = $line.Split("	")
@@ -91,10 +112,19 @@ foreach ($name in $data) {
                 Plagioclase { $Plagioclase += $properties.Quantity }
                 AzurePlagioclase { $AzurePlagioclase += $properties.Quantity }
                 RichPlagioclase { $RichPlagioclase += $properties.Quantity }
+
+                WhiteGlaze { $WhiteGlaze += $properties.Quantity }
             }
 
         }
     }
+
+    #Ice
+
+    $iceVolume = $WhiteGlaze*100
+    $sumIceVolume += $iceVolume
+
+    $WhiteGlazeSum += $WhiteGlaze
 
     #volimes
     $VolumeOfVeldspar = $Veldspar*0.10
@@ -113,7 +143,8 @@ foreach ($name in $data) {
     $VolumeOfAzurePlagioclase = $AzurePlagioclase*0.35
     $VolumeOfRichPlagioclase = $RichPlagioclase*0.35
 
-    $sumVolume = $VolumeOfVeldspar + $VolumeOfConcentratedVeldspar + $VolumeOfDenseVeldspar + $VolumeOfScordite + $VolumeOfCondensedScordite + $VolumeOfMassiveScordite + $VolumeOfPyroxeres + $VolumeOfSolidSolidPyroxeres + $VolumeOfViscousPyroxeres + $VolumeOfPlagioclase + $VolumeOfAzurePlagioclase + $VolumeOfRichPlagioclase
+    $oreVolume = $VolumeOfVeldspar + $VolumeOfConcentratedVeldspar + $VolumeOfDenseVeldspar + $VolumeOfScordite + $VolumeOfCondensedScordite + $VolumeOfMassiveScordite + $VolumeOfPyroxeres + $VolumeOfSolidSolidPyroxeres + $VolumeOfViscousPyroxeres + $VolumeOfPlagioclase + $VolumeOfAzurePlagioclase + $VolumeOfRichPlagioclase
+    $sumOreVolume += $oreVolume
 
     #final output
     Write-Host "
@@ -135,8 +166,33 @@ foreach ($name in $data) {
     Azure Plagioclase: $AzurePlagioclase
     Rich Plagioclase: $RichPlagioclase
 
-    SumVolume: $sumVolume
+    White Glaze: $WhiteGlaze
+
+    Ore Volume: $oreVolume
+    Ice Volume: $iceVolume
     "
 }
 
+Write-Host "Summary
+
+Fleet Com:"
+$fleetCom
+
+Write-Host "
+Trucks:"
+$trucks
+
+Write-Host "
+Privat diggers:"
+$noOrka
+
+Write-Host "
+Sum Ore Value:"
+$sumOreVolume
+
+Write-Host "
+Sum Ice Value:"
+$sumIceVolume
+
+Write-Host " "
 Stop-Transcript
