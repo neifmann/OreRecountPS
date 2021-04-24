@@ -1,4 +1,4 @@
-# EVE online OreRecountPS
+# EVE online / OreRecountPS
 
 Simple PowerShell Script for mining fleet booty calculation.
 
