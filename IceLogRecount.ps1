@@ -5,8 +5,11 @@ Set-ExecutionPolicy -Scope CurrentUser Bypass -Force
 # Set input log file full path
 $InputFile = "E:\pstemp\Loot - 2021.04.23 20.47.25.txt"
 
+# Set debug file
+$debugFile = "E:\pstemp\debug.txt"
+
 # Set output file 
-$OutputFile = "E:\pstemp\out.txt"
+$OutputFile = "E:\pstemp\Loot - 2021.04.23 20.47.25 - out.txt"
 
 # Set FleetCom pilot
 $fleetCom = @(
@@ -32,14 +35,13 @@ $noOrka = @(
 $excludedPersons = $trucks + $noOrka
 $sumIceVolume = 0
 $sumIce = 0
-$data = @()
+$pilotsList = @()
+
+Start-Transcript -path $debugFile -Force
 
 Write-Host "-----------------------------"
 
-(Get-Content $InputFile) | ? {$_.trim() -ne "" } | set-content $InputFile
-(Get-Content $InputFile) -notmatch "Time	Character	Item Type	Quantity	Item Group" | Out-File $InputFile
-
-$text = Get-Content -path $InputFile
+$text = (((Get-Content $InputFile) | ? {$_.trim() -ne "" }) -notmatch "Time	Character	Item Type	Quantity	Item Group") -match "Ice"
 
 #get list of pilots
 foreach($line in $text){
@@ -59,16 +61,20 @@ foreach($line in $text){
 
     if ( !($properties.name -in $data) -and !( $properties.name -in $excludedPersons ) ) {
 
-        $data += $properties.name
+        $pilotsList += $properties.name
 
     }
 
 }
 
+Stop-Transcript
+
+Write-Host "-----------------------------"
+
 Start-Transcript -path $OutputFile -Force
 
 #iterate over pilots in spades list
-foreach ($name in $data) {
+foreach ($name in $pilotsList) {
 
     $ClearIcicle = 0
     $WhiteGlaze = 0
@@ -151,26 +157,29 @@ foreach ($name in $data) {
     "
 }
 
-Write-Host "Summary
+Write-Host "
+    ---------------------------------------------
 
-Fleet Com:"
-$fleetCom
+    Summary
+
+    Fleet Com:"
+"    " + $fleetCom
 
 Write-Host "
-Trucks:"
-$trucks
+    Trucks:"
+"    " + $trucks
 
 Write-Host "
-Privat diggers:"
+    Privat diggers:"
 $noOrka
 
 Write-Host "
-Sum Ice:"
-$sumIce
+    Sum Ice:"
+"    " + $sumIce
 
 Write-Host "
-Sum Ice Value:"
-$sumIceVolume
+    Sum Ice Value:"
+"    " + $sumIceVolume
 
 Write-Host " "
 Stop-Transcript
