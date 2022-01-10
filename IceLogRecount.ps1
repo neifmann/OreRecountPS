@@ -1,5 +1,9 @@
+#
 # developed by Neifmann 
 # https://github.com/neifmann
+#
+# https://github.com/DmitryShevkun/OreRecountPS
+#
 Set-ExecutionPolicy -Scope CurrentUser Bypass -Force
 
 # Set input log file full path
