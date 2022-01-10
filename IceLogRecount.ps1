@@ -17,23 +17,18 @@ $OutputFile = "E:\pstemp\Loot - 2021.04.23 20.47.25 - out.txt"
 
 # Set FleetCom pilot
 $fleetCom = @(
-            'Natalie Moreau'
+            'John Doe'
             )
 
 # Set trucks pilots Names
 $trucks = @(
-            'Arife Frostbreeze'
+            'Jane Doe'
             )
 
 # Set pilots who did not storing ore in Orca
 $noOrka = @(
-            'Gentle Locksmith',
-            'BoB Pu4inski',
-            'Boaten4 Boatz',
-            'Dazutlek UnDead'
+            'Jim Doe'
             )
-
-
 
 #initialize variables
 $excludedPersons = $trucks + $noOrka

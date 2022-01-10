@@ -13,15 +13,19 @@ $InputFile = "E:\pstemp\Loot_-_2021.03.06_14.53.32.txt"
 $OutputFile = "E:\pstemp\out.txt"
 
 # Set FleetCom pilot
-$fleetCom = @()
+$fleetCom = @(
+            'John Doe'
+            )
 
 # Set trucks pilots Names
-$trucks = @()
+$trucks = @(
+            'Jane Doe'
+            )
 
 # Set pilots who did not storing ore in Orca
-$noOrka = @()
-
-
+$noOrka = @(
+            'Jim Doe'
+            )
 
 #initialize variables
 $excludedPersons = $trucks + $noOrka
