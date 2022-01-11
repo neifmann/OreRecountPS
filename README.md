@@ -2,8 +2,8 @@
 
 Simple PowerShell Script for mining fleet booty calculation.
 
-For using script
-- download PowerShell(*.ps1) script file 
-- put it and mining log file in a directory
-- open Script with notepad and set options at the begining
-- run script
+Usage:
+execute script in powershell or windows termenal enveronment with fleet log file passed as argument
+
+Like:
+.\HsMoonLogRecount.ps1 .\loot_moon.txt
