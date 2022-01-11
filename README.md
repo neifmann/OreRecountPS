@@ -9,4 +9,4 @@ Example   .\HsMoonLogRecount.ps1 .\loot_moon.txt
 Pay attention that fleet log file will be trimed to remove unnecessary lines.
 There is an option to add () -match "Ice" or () -match "moon" function at trim step to get really nice state of fleet log file for that tipes of booty.
 
-You can also set options like FleetCom, Cargoes and "noOrca" miners in script itself.
+You can also set options like FleetCom, Cargoers and "noOrca" miners in script itself.
