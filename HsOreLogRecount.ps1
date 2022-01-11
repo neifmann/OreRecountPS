@@ -7,10 +7,13 @@
 Set-ExecutionPolicy -Scope CurrentUser Bypass -Force
 
 # Set input log file full path
-$InputFile = "E:\pstemp\Loot_-_2021.04.21_16.22.12.txt"
+$InputFile = $args[0]
 
 # Set output file 
-$OutputFile = "E:\pstemp\Loot_-_2021.04.21_16.22.12 - out.txt"
+$OutputFile = "$InputFile - out.txt"
+
+# Set debug file
+$debugFile = "$InputFile - debug.txt"
 
 # Set FleetCom pilot
 $fleetCom = @(
@@ -33,12 +36,17 @@ $noOrka = @()
 #initialize variables
 $excludedPersons = $trucks + $noOrka
 $sumOreVolume = 0
-$data = @()
+$pilotList = @()
+
+
+
+#operate data and write debug output
+Start-Transcript -path $debugFile -Force
 
 Write-Host "-----------------------------"
 
-(Get-Content $InputFile) | ? {$_.trim() -ne "" } | set-content $InputFile
-(Get-Content $InputFile) -notmatch "Time	Character	Item Type	Quantity	Item Group" | Out-File $InputFile
+#trim input file to remove unnecessary lines
+((Get-Content $InputFile) | ? {$_.trim() -ne "" }) -notmatch "Time	Character	Item Type	Quantity	Item Group" | Out-File $InputFile
 
 $text = Get-Content -path $InputFile
 
@@ -47,10 +55,10 @@ foreach($line in $text){
     $nline = $line.Split("	")
 
     $properties = @{
-        'time'  = $nline[0]
-        'name'   = $nline[1]
-        'ItemType' = $nline[2] -replace ">.*<","" -replace "localized","" -replace "hint","" -replace "\W",""
-        'Quantity' = $nline[3]
+        'time'      = $nline[0]
+        'name'      = $nline[1]
+        'ItemType'  = $nline[2] -replace ">.*<","" -replace "localized","" -replace "hint","" -replace "\W",""
+        'Quantity'  = $nline[3]
         'ItemGroup' = $nline[4] -replace ">.*<","" -replace "localized","" -replace "hint","" -replace "\W",""
     }
     
@@ -58,18 +66,26 @@ foreach($line in $text){
 
     Write-Host "-----------------------------"
 
-    if ( !($properties.name -in $data) -and !( $properties.name -in $excludedPersons ) ) {
+    if ( !($properties.name -in $pilotList) -and !( $properties.name -in $excludedPersons ) ) {
 
-        $data += $properties.name
+        $pilotList += $properties.name
 
     }
 
 }
 
+
+
+Stop-Transcript
+
+Write-Host "-----------------------------"
+
 Start-Transcript -path $OutputFile -Force
 
+
+
 #iterate over pilots in spades list
-foreach ($name in $data) {
+foreach ($name in $pilotList) {
 
     $Veldspar = 0
     $ConcentratedVeldspar = 0
@@ -185,6 +201,8 @@ $noOrka
 Write-Host "
 Sum Ore Value:"
 $sumOreVolume
+
+
 
 Write-Host " "
 Stop-Transcript

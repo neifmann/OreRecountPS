@@ -7,13 +7,13 @@
 Set-ExecutionPolicy -Scope CurrentUser Bypass -Force
 
 # Set input log file full path
-$InputFile = "E:\pstemp\Loot - 2021.04.23 20.47.25.txt"
-
-# Set debug file
-$debugFile = "E:\pstemp\debug.txt"
+$InputFile = $args[0]
 
 # Set output file 
-$OutputFile = "E:\pstemp\Loot - 2021.04.23 20.47.25 - out.txt"
+$OutputFile = "$InputFile - out.txt"
+
+# Set debug file
+$debugFile = "$InputFile - debug.txt"
 
 # Set FleetCom pilot
 $fleetCom = @(
@@ -34,23 +34,29 @@ $noOrka = @(
 $excludedPersons = $trucks + $noOrka
 $sumIceVolume = 0
 $sumIce = 0
-$pilotsList = @()
+$pilotList = @()
 
+
+
+#operate data and write debug output
 Start-Transcript -path $debugFile -Force
 
 Write-Host "-----------------------------"
 
-$text = (((Get-Content $InputFile) | ? {$_.trim() -ne "" }) -notmatch "Time	Character	Item Type	Quantity	Item Group") -match "Ice"
+#trim input file to remove unnecessary lines
+(((Get-Content $InputFile) | ? {$_.trim() -ne "" }) -notmatch "Time	Character	Item Type	Quantity	Item Group") -match "Ice" | Out-File $InputFile
+
+$text = Get-Content -path $InputFile
 
 #get list of pilots
 foreach($line in $text){
     $nline = $line.Split("	")
 
     $properties = @{
-        'time'  = $nline[0]
-        'name'   = $nline[1]
-        'ItemType' = $nline[2] -replace ">.*<","" -replace "localized","" -replace "hint","" -replace "\W",""
-        'Quantity' = $nline[3]
+        'time'      = $nline[0]
+        'name'      = $nline[1]
+        'ItemType'  = $nline[2] -replace ">.*<","" -replace "localized","" -replace "hint","" -replace "\W",""
+        'Quantity'  = $nline[3]
         'ItemGroup' = $nline[4] -replace ">.*<","" -replace "localized","" -replace "hint","" -replace "\W",""
     }
     
@@ -60,11 +66,13 @@ foreach($line in $text){
 
     if ( !($properties.name -in $data) -and !( $properties.name -in $excludedPersons ) ) {
 
-        $pilotsList += $properties.name
+        $pilotList += $properties.name
 
     }
 
 }
+
+
 
 Stop-Transcript
 
@@ -72,8 +80,10 @@ Write-Host "-----------------------------"
 
 Start-Transcript -path $OutputFile -Force
 
+
+
 #iterate over pilots in spades list
-foreach ($name in $pilotsList) {
+foreach ($name in $pilotList) {
 
     $ClearIcicle = 0
     $WhiteGlaze = 0
@@ -136,18 +146,18 @@ foreach ($name in $pilotsList) {
     Write-Host "
     --------------$name---------------
     
-    ClearIcicle: $ClearIcicle
+    Clear Icicle: $ClearIcicle
     White Glaze: $WhiteGlaze
-    BlueIce: $BlueIce
-    GlacialMass: $GlacialMass
+    Blue Ice: $BlueIce
+    Glacial Mass: $GlacialMass
 
-    EnrichedClearIcicle: $EnrichedClearIcicle
-    PristineWhiteGlaze: $PristineWhiteGlaze
-    ThickBlueIce: $ThickBlueIce
-    SmoothGlacialMass: $SmoothGlacialMass
+    Enriched Clear Icicle: $EnrichedClearIcicle
+    Pristine White Glaze: $PristineWhiteGlaze
+    Thick Blue Ice: $ThickBlueIce
+    Smooth Glacial Mass: $SmoothGlacialMass
 
-    GlareCrust: $GlareCrust
-    DarkGlitter: $DarkGlitter
+    Glare Crust: $GlareCrust
+    Dark Glitter: $DarkGlitter
     Gelidus: $Gelidus
     Krystallos: $Krystallos
 
@@ -179,6 +189,8 @@ Write-Host "
 Write-Host "
     Sum Ice Value:"
 "    " + $sumIceVolume
+
+
 
 Write-Host " "
 Stop-Transcript
