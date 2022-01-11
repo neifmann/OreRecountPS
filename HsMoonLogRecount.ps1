@@ -43,7 +43,7 @@ Start-Transcript -path $debugFile -Force
 Write-Host "-----------------------------"
 
 #trim input file to remove unnecessary lines
-(((Get-Content $InputFile) | ? {$_.trim() -ne "" }) -notmatch "Time	Character	Item Type	Quantity	Item Group") -match "moon" | Out-File $InputFile
+((Get-Content $InputFile) | ? {$_.trim() -ne "" }) -notmatch "Time	Character	Item Type	Quantity	Item Group" | Out-File $InputFile
 
 $text = Get-Content -path $InputFile
 
