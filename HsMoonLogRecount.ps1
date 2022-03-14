@@ -22,12 +22,14 @@ $fleetCom = @(
 
 # Set trucks pilots Names
 $trucks = @(
-            'Jane Doe'
+            'Jane Doe',
+            'Cate Bi'
             )
 
 # Set pilots who did not storing ore in Orca
 $noOrka = @(
-            'Jim Doe'
+            'Jim Doe',
+            'Sara Br'
             )
 
 #initialize variables
@@ -162,27 +164,27 @@ foreach ($name in $pilotList) {
     Glistening Bitumens: $GlisteningBitumens
 
     Ore Volume: $oreVolume
+
     "
 }
 
-Write-Host "Summary
+Write-Host "
+    ---------------Summary---------------
 
-Fleet Com:"
-$fleetCom
+    Fleet Com:"
+"    " + $fleetCom
 
 Write-Host "
-Trucks:"
-$trucks
+    Trucks:"
+"    " + $trucks
 
 Write-Host "
-Privat diggers:"
-$noOrka
+    Privat diggers:"
+"    " + $noOrka
 
 Write-Host "
-Sum Ore Volume:"
-$sumOreVolume
-
-
+    Sum Ore Volume:"
+"    " + $sumOreVolume
 
 Write-Host " "
 Stop-Transcript

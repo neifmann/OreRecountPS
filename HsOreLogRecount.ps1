@@ -185,24 +185,23 @@ foreach ($name in $pilotList) {
     "
 }
 
-Write-Host "Summary
+Write-Host "
+    ---------------Summary---------------
 
-Fleet Com:"
-$fleetCom
+    Fleet Com:"
+"    " + $fleetCom
 
 Write-Host "
-Trucks:"
-$trucks
+    Trucks:"
+"    " + $trucks
 
 Write-Host "
-Privat diggers:"
-$noOrka
+    Privat diggers:"
+"    " + $noOrka
 
 Write-Host "
-Sum Ore Value:"
-$sumOreVolume
-
-
+    Sum Ore Volume:"
+"    " + $sumOreVolume
 
 Write-Host " "
 Stop-Transcript

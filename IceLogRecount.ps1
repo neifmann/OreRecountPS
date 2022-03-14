@@ -167,9 +167,7 @@ foreach ($name in $pilotList) {
 }
 
 Write-Host "
-    ---------------------------------------------
-
-    Summary
+    ---------------Summary---------------
 
     Fleet Com:"
 "    " + $fleetCom
