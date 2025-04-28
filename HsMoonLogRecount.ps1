@@ -1,8 +1,9 @@
 #
 # developed by Neifmann 
 # https://github.com/neifmann
+# https://github.com/DmitryShevkun
 #
-# https://github.com/DmitryShevkun/OreRecountPS
+# https://github.com/neifmann/OreRecountPS
 #
 Set-ExecutionPolicy -Scope CurrentUser Bypass -Force
 
